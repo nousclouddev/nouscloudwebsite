@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
 
@@ -47,7 +46,9 @@ const Navbar = () => {
               </button>
             ))}
             <a
-              href="#"
+              href="https://agent.nouscloud.tech/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="text-gray-700 hover:text-primary font-medium transition-colors duration-200 relative group"
             >
               AgentMarketplace
@@ -81,7 +82,9 @@ const Navbar = () => {
               ))}
               <div className="px-3 py-2">
                 <a
-                  href="#"
+                  href="https://agent.nouscloud.tech/"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-gray-700 hover:text-primary font-medium transition-colors duration-200"
                 >
                   AgentMarketplace

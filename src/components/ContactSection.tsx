@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -63,6 +62,7 @@ const ContactSection = () => {
             </div>
           </div>
 
+          {/*
           <Card className="border-gray-200 shadow-lg">
             <CardHeader>
               <CardTitle>Send us a message</CardTitle>
@@ -86,6 +86,7 @@ const ContactSection = () => {
               </Button>
             </CardContent>
           </Card>
+          */}
         </div>
       </div>
     </section>

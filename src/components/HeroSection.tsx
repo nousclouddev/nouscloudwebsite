@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import backgroundImage from "@/assets/background.png"; // Adjust path based on your structure
+import backgroundImage from "@/assets/background2.png"; // Adjust path based on your structure
 
 const HeroSection = () => {
   return (

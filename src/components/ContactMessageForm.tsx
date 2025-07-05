@@ -38,7 +38,7 @@ const ContactMessageForm = () => {
 
   const sendEmail = (token: string) => {
     const payload = {
-      to: "contact@nouscloud.tech",
+      to: "info@nouscloud.tech",
       from: email,
       subject: "Contact Message",
       text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,

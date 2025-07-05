@@ -63,7 +63,6 @@ const ContactMessageForm = () => {
           (data && data.message && data.message.toLowerCase().includes("success")) ||
           res.ok
         ) {
-          alert("Successfully sent message");
           setSent(true);
           setName("");
           setEmail("");

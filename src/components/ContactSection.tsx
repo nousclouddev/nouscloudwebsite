@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Globe, MapPin, Phone } from "lucide-react";
+import ContactMessageForm from "./ContactMessageForm";
 
 const ContactSection = () => {
   return (
@@ -17,7 +18,9 @@ const ContactSection = () => {
           </p>
         </div>
 
+
         <div className="grid lg:grid-cols-2 gap-12">
+          {/* Contact Information Block */}
           <div className="space-y-8">
             <div>
               <h3 className="text-2xl font-semibold mb-6">Contact Information</h3>
@@ -60,6 +63,11 @@ const ContactSection = () => {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Send us a message form block */}
+          <div>
+            <ContactMessageForm />
           </div>
 
           {/*

@@ -40,7 +40,7 @@ const ContactSection = () => {
                   </div>
                   <div>
                     <p className="font-medium">Website</p>
-                    <p className="text-muted-foreground">www.nouscloud.ai</p>
+                    <p className="text-muted-foreground">nouscloud.tech</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">

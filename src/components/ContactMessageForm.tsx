@@ -1,11 +1,15 @@
+
 import { useState, useRef, FormEvent } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import ReCAPTCHA from "react-google-recaptcha";
 
+const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "<SITE_KEY>";
 const API_URL = "https://5zt0gybyx1.execute-api.ap-south-1.amazonaws.com/prod/send";
 const API_KEY = "DWNWK4r9jO10yqWZJDV6g4V1DwnOUKWm8FEw0Qyu";
 const RATE_LIMIT_MS = 10000;
+
 
 const ContactMessageForm = () => {
   const [name, setName] = useState("");
@@ -13,6 +17,9 @@ const ContactMessageForm = () => {
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [captcha, setCaptcha] = useState("");
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -21,16 +28,21 @@ const ContactMessageForm = () => {
       alert("Please wait before sending another request.");
       return;
     }
+    if (!captcha) {
+      alert("Please complete the captcha");
+      return;
+    }
     setLoading(true);
-    sendEmail();
+    sendEmail(captcha);
   };
 
-  const sendEmail = () => {
+  const sendEmail = (token: string) => {
     const payload = {
-      to: "contact@nouscloud.ai",
+      to: "contact@nouscloud.tech",
       from: email,
       subject: "Contact Message",
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
+      recaptchaToken: token
     };
     fetch(API_URL, {
       method: "POST",
@@ -56,13 +68,11 @@ const ContactMessageForm = () => {
           setName("");
           setEmail("");
           setMessage("");
+          setCaptcha("");
+          recaptchaRef.current?.reset();
           localStorage.setItem("lastContactMsgTime", Date.now().toString());
-        } else {
-          const error = data && data.message ? data.message : await res.text();
-          alert("Failed to send message: " + error);
         }
       })
-      .catch(() => alert("Failed to send message"))
       .finally(() => setLoading(false));
   };
 
@@ -90,6 +100,12 @@ const ContactMessageForm = () => {
           onChange={e => setMessage(e.target.value)}
           required
           className="min-h-[100px]"
+        />
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          sitekey={SITE_KEY}
+          onChange={value => setCaptcha(value || "")}
+          className="mx-auto"
         />
         <Button type="submit" disabled={loading} className="w-full">
           {loading ? "Sending..." : "Send"}

@@ -49,10 +49,10 @@ const Navbar = () => {
               href="https://agent.nouscloud.tech/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-700 hover:text-primary font-medium transition-colors duration-200 relative group"
+              className="font-bold bg-gradient-to-r from-pink-500 to-yellow-400 text-white px-4 py-2 rounded shadow-md hover:from-pink-600 hover:to-yellow-500 transition-colors duration-200"
+              style={{letterSpacing: '0.03em'}}
             >
-              AgentMarketplace
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full"></span>
+              Agent Hub
             </a>
           </div>
 
@@ -85,9 +85,10 @@ const Navbar = () => {
                   href="https://agent.nouscloud.tech/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-700 hover:text-primary font-medium transition-colors duration-200"
+                  className="block font-bold bg-gradient-to-r from-pink-500 to-yellow-400 text-white px-4 py-2 rounded shadow-md text-center hover:from-pink-600 hover:to-yellow-500 transition-colors duration-200"
+                  style={{letterSpacing: '0.03em'}}
                 >
-                  AgentMarketplace
+                  Agent Hub
                 </a>
               </div>
             </div>

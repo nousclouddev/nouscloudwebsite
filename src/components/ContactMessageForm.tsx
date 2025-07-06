@@ -18,6 +18,7 @@ const ContactMessageForm = () => {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [captcha, setCaptcha] = useState("");
+  const [thankYou, setThankYou] = useState("");
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
 
@@ -70,6 +71,8 @@ const ContactMessageForm = () => {
           setCaptcha("");
           recaptchaRef.current?.reset();
           localStorage.setItem("lastContactMsgTime", Date.now().toString());
+          setThankYou("Thanks! we will connect with you shortly.");
+          setTimeout(() => setThankYou(''), 5000);
         }
       })
       .finally(() => setLoading(false));
@@ -110,7 +113,7 @@ const ContactMessageForm = () => {
           {loading ? "Sending..." : "Send"}
         </Button>
       </form>
-      {sent && <p className="mt-2 text-green-600">Thanks! We'll reach out soon.</p>}
+      {thankYou && <p className="mt-2 text-green-600">{thankYou}</p>}
     </div>
   );
 };

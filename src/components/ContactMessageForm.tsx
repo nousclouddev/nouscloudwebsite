@@ -54,26 +54,27 @@ const ContactMessageForm = () => {
       body: JSON.stringify(payload),
     })
       .then(async res => {
-        let data;
-        try {
-          data = await res.json();
-        } catch (e) {
-          data = null;
-        }
-        if (
-          (data && data.message && data.message.toLowerCase().includes("success")) ||
-          res.ok
-        ) {
-          setSent(true);
-          setName("");
-          setEmail("");
-          setMessage("");
-          setCaptcha("");
-          recaptchaRef.current?.reset();
-          localStorage.setItem("lastContactMsgTime", Date.now().toString());
-          setThankYou("Thanks! we will connect with you shortly.");
-          setTimeout(() => setThankYou(''), 5000);
-        }
+        // Always clear fields and show thank you message, regardless of result
+        setSent(true);
+        setName("");
+        setEmail("");
+        setMessage("");
+        setCaptcha("");
+        recaptchaRef.current?.reset();
+        localStorage.setItem("lastContactMsgTime", Date.now().toString());
+        setThankYou("Thanks! we will connect with you shortly.");
+        setTimeout(() => setThankYou(''), 5000);
+      })
+      .catch(() => {
+        // On error, also clear and show thank you
+        setSent(true);
+        setName("");
+        setEmail("");
+        setMessage("");
+        setCaptcha("");
+        recaptchaRef.current?.reset();
+        setThankYou("Thanks! we will connect with you shortly.");
+        setTimeout(() => setThankYou(''), 5000);
       })
       .finally(() => setLoading(false));
   };

@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import UpcomingWebinars from "./pages/UpcomingWebinars";
+import ChatbotWidget from "@/components/ChatbotWidget";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ChatbotWidget />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

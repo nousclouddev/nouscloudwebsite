@@ -17,7 +17,12 @@ import { Input } from "@/components/ui/input";
 import { Course } from "@/types/course";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useState, useRef } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
+import { toast } from "@/components/ui/sonner";
 import * as z from "zod";
+
+const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY || "<SITE_KEY>";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -45,7 +50,15 @@ const CourseRegistrationForm = ({ isOpen, onClose, course }: CourseRegistrationF
     },
   });
 
+  const [captcha, setCaptcha] = useState("");
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (!captcha) {
+      alert("Please complete the captcha");
+      return;
+    }
+
     const payload = {
       ...values,
       course_name: course.course_name,
@@ -71,6 +84,9 @@ const CourseRegistrationForm = ({ isOpen, onClose, course }: CourseRegistrationF
     } finally {
       onClose();
       form.reset();
+      setCaptcha("");
+      recaptchaRef.current?.reset();
+      toast("You are successfully Registered, please check the mail for details");
     }
   };
 
@@ -146,6 +162,12 @@ const CourseRegistrationForm = ({ isOpen, onClose, course }: CourseRegistrationF
                   <FormMessage />
                 </FormItem>
               )}
+            />
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={SITE_KEY}
+              onChange={value => setCaptcha(value || "")}
+              className="mx-auto"
             />
             <Button type="submit" className="w-full bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-600 hover:to-cyan-500">
               Submit

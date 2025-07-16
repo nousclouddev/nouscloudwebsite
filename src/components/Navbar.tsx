@@ -10,7 +10,7 @@ const Navbar = () => {
     { name: "Solutions", href: "#solutions" },
     { name: "Consulting", href: "#consulting" },
     { name: "Courses", href: "#courses" },
-    { name: "Upcoming Webinars", href: "/upcoming-webinars", isPage: true },
+    { name: "Upcoming Courses", href: "/upcoming-courses", isPage: true },
     { name: "Contact", href: "#contact" },
   ];
 

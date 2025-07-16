@@ -10,7 +10,9 @@ const fetchCourses = async (): Promise<Course[]> => {
   );
   if (!res.ok) throw new Error("Failed fetching courses");
   const data = await res.json();
-  return data;
+  // Some API versions wrap the courses array in a `courses` or `data` key.
+  // Fallback to the raw response if neither wrapper exists.
+  return data.courses ?? data.data ?? data;
 };
 
 const UpcomingCourses = () => {
@@ -19,7 +21,7 @@ const UpcomingCourses = () => {
     queryFn: fetchCourses,
   });
 
-  const courses = data?.slice(0, 3) || [];
+  const courses = Array.isArray(data) ? data.slice(0, 3) : [];
 
   return (
     <div className="min-h-screen bg-background font-inter">

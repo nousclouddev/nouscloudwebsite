@@ -28,7 +28,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
       <CardContent className="flex-grow">
         <p className="text-gray-600 mb-4">{course.description}</p>
         <div className="flex flex-wrap gap-1 mb-4">
-          {course.key_areas.map((area, i) => (
+          {(course.key_areas || []).map((area, i) => (
             <Badge key={i} variant="secondary" className="text-xs">
               {area}
             </Badge>

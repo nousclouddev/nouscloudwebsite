@@ -10,9 +10,16 @@ const fetchCourses = async (): Promise<Course[]> => {
   );
   if (!res.ok) throw new Error("Failed fetching courses");
   const data = await res.json();
-  // Some API versions wrap the courses array in a `courses` or `data` key.
-  // Fallback to the raw response if neither wrapper exists.
-  return data.courses ?? data.data ?? data;
+  const rawCourses = data.courses ?? data.data ?? data;
+  if (!Array.isArray(rawCourses)) return [];
+  return rawCourses.map((c: any) => ({
+    ...c,
+    key_areas: Array.isArray(c.key_areas)
+      ? c.key_areas
+      : typeof c.key_areas === "string"
+        ? c.key_areas.split(/[,#]/).map((s: string) => s.trim()).filter(Boolean)
+        : [],
+  }));
 };
 
 const UpcomingCourses = () => {
@@ -21,7 +28,7 @@ const UpcomingCourses = () => {
     queryFn: fetchCourses,
   });
 
-  const courses = Array.isArray(data) ? data.slice(0, 3) : [];
+  const courses = Array.isArray(data) ? data : [];
 
   return (
     <div className="min-h-screen bg-background font-inter">
@@ -39,6 +46,9 @@ const UpcomingCourses = () => {
           {isLoading && <p className="text-center">Loading...</p>}
           {error && (
             <p className="text-center text-red-500">Error loading courses</p>
+          )}
+          {!isLoading && courses.length === 0 && !error && (
+            <p className="text-center">No upcoming courses found.</p>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {courses.map((course, idx) => (

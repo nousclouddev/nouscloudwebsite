@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import os
 from chat_flow import chat_with_gemini
+from mangum import Mangum
 
 app = FastAPI()
 
@@ -32,3 +33,5 @@ async def chatbot_send(req: ChatRequest):
     except Exception as e:
         print("Error:", str(e))  # Debug print
         return {"error": str(e)}
+
+handler = Mangum(app)

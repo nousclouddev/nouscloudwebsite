@@ -33,7 +33,7 @@ const ChatbotWidget = () => {
     setInput("");
     setLoading(true);
     try {
-      const res = await fetch("https://nouscloudwebsite.onrender.com/api/chatbot/send", {
+      const res = await fetch("https://ymnd7q8z4h.execute-api.ap-south-1.amazonaws.com/Prod/api/chatbot/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),

@@ -29,14 +29,21 @@ const ChatbotWidget = () => {
   const sendMessage = async () => {
     if (!input.trim()) return;
     const userMsg = { role: "user" as const, content: input };
+    const userInput = input.trim(); // Store the input before clearing
     setMessages((msgs) => [...msgs, userMsg]);
     setInput("");
     setLoading(true);
     try {
+      // POST to: https://5ppqql37ni.execute-api.ap-south-1.amazonaws.com/Prod/api/chatbot/send
+      // Headers: { "Content-Type": "application/json", "x-api-key": "changeme" }
+      // Body: { "message": "Your message here" }
       const res = await fetch("https://5ppqql37ni.execute-api.ap-south-1.amazonaws.com/Prod/api/chatbot/send", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: input }),
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": "changeme"
+        },
+        body: JSON.stringify({ message: userInput }),
       });
       const data = await res.json();
       setMessages((msgs) => [...msgs, { role: "assistant", content: data.response }]);

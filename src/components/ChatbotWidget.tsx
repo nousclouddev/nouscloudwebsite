@@ -42,7 +42,7 @@ const ChatbotWidget = () => {
     const API_BASE_URL = "https://eu5hqnjt2i.execute-api.ap-south-1.amazonaws.com/development";
     const API_KEY = "nouscloud-api-key-2024";
 
-    // Scroll to bottom on new message
+    // Scroll to bottom on n
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, open]);

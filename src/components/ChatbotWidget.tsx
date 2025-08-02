@@ -42,7 +42,7 @@ const ChatbotWidget = () => {
     const API_BASE_URL = "https://eu5hqnjt2i.execute-api.ap-south-1.amazonaws.com/development";
     const API_KEY = "nouscloud-api-key-2024";
 
-    // Scroll to bottom on n
+    // Scroll to bottom on new message
     useEffect(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages, open]);
@@ -89,7 +89,7 @@ const ChatbotWidget = () => {
                 },
                 body: JSON.stringify({
                     message: userInput,
-                    include_sources: true
+                    include_sources: false
                 }),
             });
 
@@ -140,10 +140,16 @@ const ChatbotWidget = () => {
         <>
             {/* Floating Chat Button */}
             <button
-                className="fixed bottom-6 left-6 z-50 bg-primary text-white rounded-full shadow-lg w-14 h-14 flex items-center justify-center hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary relative"
+                className="bg-primary text-white rounded-full shadow-lg w-14 h-14 flex items-center justify-center hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary relative"
                 onClick={() => setOpen(true)}
                 aria-label="Open NousCloud AI Assistant"
-                style={{ boxShadow: "0 4px 24px 0 rgba(0,0,0,0.15)" }}
+                style={{
+                  position: 'fixed',
+                  bottom: '24px',
+                  left: '24px',
+                  zIndex: 9999,
+                  boxShadow: "0 4px 24px 0 rgba(0,0,0,0.15)"
+                }}
             >
                 <MessageCircle size={28} />
 
@@ -155,7 +161,14 @@ const ChatbotWidget = () => {
 
             {/* Chat Modal */}
             {open && (
-                <div className="fixed inset-0 z-50 flex items-end md:items-center justify-start md:justify-center bg-black/30 backdrop-blur-sm">
+                <div
+                  className="flex items-end md:items-center justify-start md:justify-center bg-black/30 backdrop-blur-sm"
+                  style={{
+                    position: 'fixed',
+                    inset: 0,
+                    zIndex: 9999,
+                  }}
+                >
                     <div className="w-full max-w-md md:rounded-lg bg-white shadow-2xl flex flex-col h-[70vh] md:h-[80vh] animate-fade-in-up relative md:mb-0 mb-4 md:ml-0 ml-4">
                         {/* Header */}
                         <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-primary to-blue-600 text-white">
@@ -163,7 +176,7 @@ const ChatbotWidget = () => {
                                 <MessageCircle size={20} />
                                 <div>
                                     <div className="font-bold text-lg">NousCloud AI Assistant</div>
-                                    <div className="text-xs opacity-90">Enhanced with contextual knowledge</div>
+                                    <div className="text-xs opacity-90">Online now</div>
                                 </div>
                             </div>
                             <button onClick={() => setOpen(false)} className="text-white/80 hover:text-white">
@@ -174,8 +187,8 @@ const ChatbotWidget = () => {
                         <div className="flex-1 overflow-y-auto px-4 py-2 space-y-3 bg-gray-50">
                             {messages.length === 0 && (
                                 <div className="text-center text-gray-400 mt-4">
-                                    <div className="mb-3">👋 Hi! I'm the NousCloud AI Assistant</div>
-                                    <div className="text-xs mb-4">Ask me about our services, courses, webinars, or anything else!</div>
+                                    <div className="mb-3">👋 Hey, I'm your assistant!</div>
+                                    <div className="text-sm mb-4">How can I help you today?</div>
 
                                     {/* Quick action buttons */}
                                     <div className="space-y-2">
@@ -205,59 +218,12 @@ const ChatbotWidget = () => {
                                     <div className={`rounded-lg px-4 py-2 max-w-[85%] text-sm shadow ${msg.role === "user" ? "bg-primary text-white" : "bg-white text-gray-800 border"}`}>
                                         <div className="whitespace-pre-wrap">{msg.content}</div>
 
-                                        {/* Enhanced features for assistant messages */}
-                                        {msg.role === "assistant" && (
-                                            <div className="mt-3 space-y-2">
-                                                {/* Context indicator */}
-                                                {msg.contextUsed && (
-                                                    <div className="flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                                                        <Info size={12} />
-                                                        <span>Enhanced with company knowledge</span>
-                                                    </div>
-                                                )}
-
-                                                {/* Sources */}
-                                                {msg.sources && msg.sources.length > 0 && (
-                                                    <div className="border-t pt-2">
-                                                        <div className="text-xs font-medium text-gray-600 mb-1">Sources:</div>
-                                                        <div className="space-y-1">
-                                                            {msg.sources.map((source: Source, idx: number) => (
-                                                                <div key={idx} className="text-xs bg-gray-50 p-2 rounded border-l-2 border-blue-200">
-                                                                    <div className="flex items-start justify-between gap-2">
-                                                                        <div className="flex-1">
-                                                                            <div className="font-medium text-gray-700">{source.title}</div>
-                                                                            <div className="text-gray-500 mt-1">{source.snippet}</div>
-                                                                        </div>
-                                                                        {source.url && (
-                                                                            <a
-                                                                                href={source.url}
-                                                                                target="_blank"
-                                                                                rel="noopener noreferrer"
-                                                                                className="text-blue-500 hover:text-blue-700 flex-shrink-0"
-                                                                                title="Open source"
-                                                                            >
-                                                                                <ExternalLink size={12} />
-                                                                            </a>
-                                                                        )}
-                                                                    </div>
-                                                                    <div className="mt-1 text-xs text-gray-400">
-                                                                        Relevance: {Math.round((source.relevance_score || 0) * 100)}%
-                                                                    </div>
-                                                                </div>
-                                                            ))}
-                                                        </div>
-                                                    </div>
-                                                )}
-
-                                                {/* Flow type indicator */}
-                                                {msg.flowType && (
-                                                    <div className="text-xs text-gray-400 flex items-center gap-1">
-                                                        <span>Response type: {msg.flowType.replace(/_/g, ' ')}</span>
-                                                        {msg.timestamp && (
-                                                            <span className="ml-2">• {new Date(msg.timestamp).toLocaleTimeString()}</span>
-                                                        )}
-                                                    </div>
-                                                )}
+                                        {/* Simplified assistant message features */}
+                                        {msg.role === "assistant" && msg.timestamp && (
+                                            <div className="mt-2">
+                                                <div className="text-xs text-gray-400">
+                                                    {new Date(msg.timestamp).toLocaleTimeString()}
+                                                </div>
                                             </div>
                                         )}
                                     </div>
@@ -283,7 +249,7 @@ const ChatbotWidget = () => {
                             <input
                                 type="text"
                                 className="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                                placeholder="Ask about our services, courses, webinars..."
+                                placeholder="Type your message..."
                                 value={input}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value)}
                                 onKeyDown={handleInputKeyDown}
@@ -301,7 +267,7 @@ const ChatbotWidget = () => {
 
                         {/* Footer */}
                         <div className="px-4 pb-2 text-xs text-gray-400 text-center">
-                            Powered by NousCloud AI • Enhanced with contextual knowledge
+                            Powered by NousCloud AI
                         </div>
                     </div>
                 </div>

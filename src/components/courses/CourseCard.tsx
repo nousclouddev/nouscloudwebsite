@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { CalendarIcon, Clock, Tag } from "lucide-react";
+import { CalendarIcon, Clock, Tag, Info } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 import { Course } from "@/types/course";
 import CourseRegistrationForm from "./CourseRegistrationForm";
 
@@ -12,6 +13,7 @@ interface CourseCardProps {
 
 const CourseCard = ({ course }: CourseCardProps) => {
   const [open, setOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const isFree = !course.price || Number(course.price) === 0;
 
   return (
@@ -50,18 +52,60 @@ const CourseCard = ({ course }: CourseCardProps) => {
             <>₹{course.price}</>
           )}
         </div>
-        <Button
-          variant="link"
-          className="ml-auto p-0 text-primary"
-          onClick={() => setOpen(true)}
-        >
-          Register
-        </Button>
+        <div className="ml-auto flex gap-2">
+          {course.details && course.details.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setDetailsOpen(true)}
+              className="text-xs"
+            >
+              <Info size={14} className="mr-1" />
+              Details
+            </Button>
+          )}
+          <Button
+            variant="link"
+            className="p-0 text-primary"
+            onClick={() => setOpen(true)}
+          >
+            Register Now
+          </Button>
+        </div>
+
         <CourseRegistrationForm
           isOpen={open}
           onClose={() => setOpen(false)}
           course={course}
         />
+
+        <Dialog open={detailsOpen} onOpenChange={setDetailsOpen}>
+          <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-semibold mb-4">
+                {course.course_name} - Course Details
+              </DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              {course.details && course.details.length > 0 ? (
+                <ol className="space-y-3 list-decimal list-inside">
+                  {course.details.map((detail, index) => (
+                    <li key={index} className="text-sm leading-relaxed text-gray-700">
+                      {detail}
+                    </li>
+                  ))}
+                </ol>
+              ) : (
+                <p className="text-gray-500">No detailed information available for this course.</p>
+              )}
+            </div>
+            <div className="flex justify-end mt-6">
+              <DialogClose asChild>
+                <Button variant="outline">Close</Button>
+              </DialogClose>
+            </div>
+          </DialogContent>
+        </Dialog>
       </CardFooter>
     </Card>
   );

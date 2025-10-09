@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CalendarIcon, Clock, Tag, Info } from "lucide-react";
+import { CalendarIcon, Clock, Tag, Info, Users } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,8 @@ const CourseCard = ({ course }: CourseCardProps) => {
   const [open, setOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const isFree = !course.price || Number(course.price) === 0;
+  const availableSeats = course.seat_limit ? course.seat_limit - (course.registered_count || 0) : null;
+  const isFull = availableSeats !== null && availableSeats <= 0;
 
   return (
     <Card className="flex flex-col h-full hover:shadow-lg transition-shadow">
@@ -42,6 +44,14 @@ const CourseCard = ({ course }: CourseCardProps) => {
             </Badge>
           ))}
         </div>
+        {course.seat_limit && (
+          <div className="flex items-center gap-1 text-sm mb-2">
+            <Users size={14} className="text-gray-500" />
+            <span className={`font-medium ${isFull ? 'text-red-600' : availableSeats && availableSeats <= 5 ? 'text-orange-600' : 'text-green-600'}`}>
+              {isFull ? 'Seats Full' : `${availableSeats} available`}
+            </span>
+          </div>
+        )}
       </CardContent>
       <CardFooter className="pt-0 flex items-center gap-2">
         <div className="flex items-center gap-1 text-sm font-medium">
@@ -68,8 +78,9 @@ const CourseCard = ({ course }: CourseCardProps) => {
             variant="link"
             className="p-0 text-primary"
             onClick={() => setOpen(true)}
+            disabled={isFull}
           >
-            Register Now
+            {isFull ? 'Seats Full' : 'Register Now'}
           </Button>
         </div>
 

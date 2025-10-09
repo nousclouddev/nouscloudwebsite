@@ -11,4 +11,6 @@ export interface Course {
   host_details?: string;
   course_id?: string;
   join_link?: string;
+  seat_limit?: number;
+  registered_count?: number;
 }

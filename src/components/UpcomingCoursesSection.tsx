@@ -18,8 +18,10 @@ const fetchCourses = async (): Promise<Course[]> => {
       : typeof c.key_areas === "string"
         ? c.key_areas.split(/[,#]/).map((s: string) => s.trim()).filter(Boolean)
         : [],
-    seat_limit: c.seat_limit || c.seatLimit,
-    registered_count: c.registered_count || c.registeredCount || 0,
+    // map backend fields to frontend names
+    seat_limit: c.max_participants ?? c.seat_limit ?? c.seatLimit,
+    registered_count: c.actual_participants ?? c.registered_count ?? c.registeredCount ?? 0,
+    registration_open: c.registration_open ?? true,
     details: Array.isArray(c.details) ? c.details : 
       // Temporary mock data for testing - remove when API provides details
       index === 0 ? [

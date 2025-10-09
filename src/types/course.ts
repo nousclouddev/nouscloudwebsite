@@ -13,4 +13,8 @@ export interface Course {
   join_link?: string;
   seat_limit?: number;
   registered_count?: number;
+  // optional fields from API
+  registration_open?: boolean;
+  actual_participants?: number;
+  max_participants?: number;
 }

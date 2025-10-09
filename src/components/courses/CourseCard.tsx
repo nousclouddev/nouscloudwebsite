@@ -15,8 +15,12 @@ const CourseCard = ({ course }: CourseCardProps) => {
   const [open, setOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const isFree = !course.price || Number(course.price) === 0;
-  const availableSeats = course.seat_limit ? course.seat_limit - (course.registered_count || 0) : null;
+  // Support both seat_limit/max_participants and registered_count/actual_participants
+  const max = course.max_participants ?? course.seat_limit ?? null;
+  const actual = course.actual_participants ?? course.registered_count ?? 0;
+  const availableSeats = max !== null ? (max - actual) : null;
   const isFull = availableSeats !== null && availableSeats <= 0;
+  const registrationOpen = course.registration_open !== undefined ? course.registration_open : true;
 
   return (
     <Card className="flex flex-col h-full hover:shadow-lg transition-shadow">
@@ -74,13 +78,14 @@ const CourseCard = ({ course }: CourseCardProps) => {
               Details
             </Button>
           )}
+          {/* Registration button: show Register only if registration_open and not full */}
           <Button
             variant="link"
             className="p-0 text-primary"
             onClick={() => setOpen(true)}
-            disabled={isFull}
+            disabled={!registrationOpen || isFull}
           >
-            {isFull ? 'Seats Full' : 'Register Now'}
+            {!registrationOpen ? 'Registration Closed' : (isFull ? 'Seats Full' : 'Register Now')}
           </Button>
         </div>
 

@@ -51,9 +51,20 @@ const CourseCard = ({ course }: CourseCardProps) => {
         {course.seat_limit && (
           <div className="flex items-center gap-1 text-sm mb-2">
             <Users size={14} className="text-gray-500" />
-            <span className={`font-medium ${isFull ? 'text-red-600' : availableSeats && availableSeats <= 5 ? 'text-orange-600' : 'text-green-600'}`}>
-              {isFull ? 'Seats Full' : `${availableSeats} available`}
-            </span>
+            {/* Show number only when max present and available seats <= 10; otherwise show generic text */}
+            {isFull ? (
+              <span className="font-medium text-red-600">Seats Full</span>
+            ) : (
+              (() => {
+                const showNumber = max !== null && availableSeats !== null && (availableSeats as number) <= 10;
+                const colorClass = (availableSeats !== null && (availableSeats as number) <= 5) ? 'text-orange-600' : 'text-green-600';
+                return (
+                  <span className={`font-medium ${colorClass}`}>
+                    {showNumber ? `${availableSeats} available` : 'Seats available'}
+                  </span>
+                );
+              })()
+            )}
           </div>
         )}
       </CardContent>

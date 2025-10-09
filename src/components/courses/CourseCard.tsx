@@ -78,15 +78,20 @@ const CourseCard = ({ course }: CourseCardProps) => {
               Details
             </Button>
           )}
-          {/* Registration button: show Register only if registration_open and not full */}
-          <Button
-            variant="link"
-            className="p-0 text-primary"
-            onClick={() => setOpen(true)}
-            disabled={!registrationOpen || isFull}
-          >
-            {!registrationOpen ? 'Registration Closed' : (isFull ? 'Seats Full' : 'Register Now')}
-          </Button>
+          {/* Registration button: show only when registration is open and seats available */}
+          {registrationOpen && !isFull ? (
+            <Button
+              variant="link"
+              className="p-0 text-primary"
+              onClick={() => setOpen(true)}
+            >
+              Register Now
+            </Button>
+          ) : (
+            <span className="p-0 text-sm text-gray-500">
+              {!registrationOpen ? 'Registration Closed' : 'Seats Full'}
+            </span>
+          )}
         </div>
 
         <CourseRegistrationForm

@@ -48,7 +48,7 @@ const CourseCard = ({ course }: CourseCardProps) => {
             </Badge>
           ))}
         </div>
-        {course.seat_limit && (
+        {course.seat_limit && registrationOpen && (
           <div className="flex items-center gap-1 text-sm mb-2">
             <Users size={14} className="text-gray-500" />
             {/* Show number only when max present and available seats <= 10; otherwise show generic text */}

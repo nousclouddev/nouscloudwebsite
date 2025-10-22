@@ -68,41 +68,58 @@ const CourseCard = ({ course }: CourseCardProps) => {
           </div>
         )}
       </CardContent>
-      <CardFooter className="pt-0 flex items-center gap-2">
-        <div className="flex items-center gap-1 text-sm font-medium">
-          <Tag size={16} />
-          {isFree ? (
-            <span className="text-green-600 font-semibold">Free</span>
-          ) : (
-            <>₹{course.price}</>
-          )}
-        </div>
-        <div className="ml-auto flex gap-2">
-          {course.details && course.details.length > 0 && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setDetailsOpen(true)}
-              className="text-xs"
-            >
-              <Info size={14} className="mr-1" />
-              Details
-            </Button>
-          )}
-          {/* Registration button: show only when registration is open and seats available */}
-          {registrationOpen && !isFull ? (
-            <Button
-              variant="link"
-              className="p-0 text-primary"
-              onClick={() => setOpen(true)}
-            >
-              Register Now
-            </Button>
-          ) : (
-            <span className="p-0 text-sm text-gray-500">
-              {!registrationOpen ? 'Registration Closed' : 'Seats Full'}
-            </span>
-          )}
+      <CardFooter className="pt-0 flex flex-col gap-3">
+        {/* Registration Closed message - shown above price when registration is closed */}
+        {!registrationOpen && (
+          <div className="w-full text-center">
+            <span className="text-sm font-medium text-red-600">Registration Closed</span>
+          </div>
+        )}
+        
+        <div className="w-full flex items-center gap-2">
+          <div className="flex items-center gap-1 text-sm font-medium">
+            <Tag size={16} />
+            {isFree ? (
+              <span className="text-green-600 font-semibold">Free</span>
+            ) : (
+              <>₹{course.price}</>
+            )}
+          </div>
+          <div className="ml-auto flex gap-2">
+            {course.details && course.details.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setDetailsOpen(true)}
+                className="text-xs"
+              >
+                <Info size={14} className="mr-1" />
+                Details
+              </Button>
+            )}
+            {/* Pay & Register button - shown only when course has a price */}
+            {!isFree && (
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => setOpen(true)}
+                disabled={!registrationOpen}
+                className="text-xs"
+              >
+                Pay & Register
+              </Button>
+            )}
+            {/* Register Now button - shown only for free courses when registration is open and seats available */}
+            {isFree && registrationOpen && !isFull && (
+              <Button
+                variant="link"
+                className="p-0 text-primary"
+                onClick={() => setOpen(true)}
+              >
+                Register Now
+              </Button>
+            )}
+          </div>
         </div>
 
         <CourseRegistrationForm
